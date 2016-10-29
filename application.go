@@ -7,6 +7,6 @@ import (
 type kixcode string
 
 func main() {
-	inputConfiguration := config.Load("/home/hestersco/projects/golang/src/github.com/toefel18/labyrinth-visualizer/input-example.json")
+	inputConfiguration := config.LoadFile("input-example.json")
 	config.Print(inputConfiguration);
 }
