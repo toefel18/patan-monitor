@@ -1,0 +1,30 @@
+{
+    "version": "0.0.1",
+    "services": [
+        {
+            "id": "as",
+            "displayName": "AddressService",
+            "statisticsUrl": "http://localhost:8080/statistics",
+            "modelVersion": "1",
+            "counters": ["invocations"],
+            "samples": ["some.sample"],
+            "durations": ["duration"]
+        },
+        {
+            "id": "flow",
+            "displayName": "Flow",
+            "statisticsUrl": "http://localhost:8081/statistics",
+            "modelVersion": "1",
+            "counters": ["invocations"],
+            "samples": ["some.sample"],
+            "durations": ["duration"]
+        }
+    ],
+    "connections": [
+        {
+            "from": "flow",
+            "to": "as",
+            "durations": ["duration"]
+        }
+    ]
+}
