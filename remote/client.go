@@ -41,25 +41,26 @@ func GetBytes(url string) ([]byte, error) {
     return body, nil
 }
 
+// Retrieves the statistics URL and tries unmarshall it into each of the patan models, and stops at the first match
 func GetSnapshot(url string) (common.Snapshot, error) {
     bytes, err := GetBytes(url)
     if err != nil {
         return nil, err
     }
-    patan1 := &patan_1_0_0.Snapshot{}
-    err = json.Unmarshal(bytes, patan1)
-    if err == nil {
-        fmt.Println("received model version 1.0.0")
-        return patan1, nil
+    if snapshot1, err := tryUnmarshall(bytes, &patan_1_0_0.Snapshot{}); err == nil {
+        return snapshot1, nil;
     }
-
-    patan3 := &patan_3_0_0.Snapshot{}
-    err = json.Unmarshal(bytes, patan3)
-    if err == nil {
-        fmt.Println("received model version 3.0.0")
-        return patan3, nil
+    if snapshot3, err := tryUnmarshall(bytes, &patan_3_0_0.Snapshot{}); err == nil {
+        return snapshot3, nil;
     }
-
-    return nil, errors.New("could not unmarshal to model 1.0.0 or 3.0.0")
+    return nil, errors.New("could not unmarshal to any of the configured models")
 }
 
+func tryUnmarshall(bytes []byte, target common.Snapshot) (common.Snapshot, error) {
+    err := json.Unmarshal(bytes, target)
+    if err == nil {
+        fmt.Println("received model version 3.0.0")
+        return target, nil
+    }
+    return nil, err
+}
